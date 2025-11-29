@@ -16,13 +16,20 @@
       flake-utils,
       treefmt-nix,
     }:
-    flake-utils.lib.eachDefaultSystem (
-      system:
-      let
-        pkgs = import nixpkgs { inherit system; };
-      in
-      {
-        formatter = (treefmt-nix.lib.evalModule pkgs ./treefmt.nix).config.build.wrapper;
-      }
-    );
+    let
+      noSystem = rec {
+        nixosModules.default = import ./modules;
+        nixosModule = nixosModules.default;
+      };
+      perSystem = flake-utils.lib.eachDefaultSystem (
+        system:
+        let
+          pkgs = import nixpkgs { inherit system; };
+        in
+        {
+          formatter = (treefmt-nix.lib.evalModule pkgs ./treefmt.nix).config.build.wrapper;
+        }
+      );
+    in
+    noSystem // perSystem;
 }
