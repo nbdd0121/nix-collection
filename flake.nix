@@ -24,9 +24,13 @@
       perSystem = flake-utils.lib.eachDefaultSystem (
         system:
         let
-          pkgs = import nixpkgs { inherit system; };
+          pkgs = import nixpkgs {
+            config.allowUnfree = true;
+            inherit system;
+          };
         in
         {
+          packages = import ./pkgs { inherit pkgs; };
           formatter = (treefmt-nix.lib.evalModule pkgs ./treefmt.nix).config.build.wrapper;
         }
       );
