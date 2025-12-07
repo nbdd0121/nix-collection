@@ -5,5 +5,6 @@
     ./he-ddns.nix
     ./lanzaboote-memtest86.nix
     ./zfs-tpm-unlock
+    ./pki-selective-trust
   ];
 }
