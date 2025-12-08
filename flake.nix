@@ -7,6 +7,10 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -15,6 +19,7 @@
       nixpkgs,
       flake-utils,
       treefmt-nix,
+      rust-overlay,
     }:
     let
       noSystem = rec {
@@ -27,9 +32,11 @@
           pkgs = import nixpkgs {
             config.allowUnfree = true;
             inherit system;
+            overlays = [ rust-overlay.overlays.default ];
           };
         in
         {
+          devShells = import ./dev { inherit pkgs; };
           packages = import ./pkgs { inherit pkgs; };
           formatter = (treefmt-nix.lib.evalModule pkgs ./treefmt.nix).config.build.wrapper;
         }
