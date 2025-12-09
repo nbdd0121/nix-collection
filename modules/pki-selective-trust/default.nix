@@ -25,6 +25,8 @@
         };
       }
     );
+
+    default = { };
   };
 
   config = {
