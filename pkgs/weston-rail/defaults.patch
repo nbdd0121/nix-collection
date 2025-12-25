@@ -1,4 +1,4 @@
-commit 336b0ce4abd3a979f89ca5a9409c807edb7dec80
+commit e19f8958fb6f14b95e538aa0fb53f9b6af0ea7cc
 Author: Gary Guo <gary@garyguo.net>
 Date:   Thu Dec 25 20:47:57 2025 +0000
 
@@ -43,11 +43,61 @@ index cc03a899..0fff7d01 100644
  
  	wet->heads_changed_listener.notify = rdp_heads_changed;
  	weston_compositor_add_heads_changed_listener(c,
+diff --git a/rdprail-shell/app-list.c b/rdprail-shell/app-list.c
+index 62c3ee43..1dfc0800 100644
+--- a/rdprail-shell/app-list.c
++++ b/rdprail-shell/app-list.c
+@@ -50,6 +50,7 @@
+ #include "shell.h"
+ #include "shared/helpers.h"
+ #include "shared/image-loader.h"
++#include "shared/file-util.h"
+ 
+ #if HAVE_GLIB
+ #include <glib.h>
+@@ -1519,8 +1520,12 @@ void app_list_init(struct desktop_shell *shell)
+ 
+ 	/* load default icon */
+ 	iconpath = getenv("WSL2_DEFAULT_APP_ICON");
+-	if (iconpath && (strcmp(iconpath, "disabled") != 0))
+-		context->default_icon = load_image(iconpath);
++	if (iconpath) {
++		if (strcmp(iconpath, "disabled") != 0)
++			context->default_icon = load_image(iconpath);
++	} else {
++		context->default_icon = load_image(file_name_with_datadir("wayland.png"));
++	}
+ 
+ 	iconpath = getenv("WSL2_DEFAULT_APP_OVERLAY_ICON");
+ 	if (iconpath && (strcmp(iconpath, "disabled") != 0))
 diff --git a/rdprail-shell/shell.c b/rdprail-shell/shell.c
-index 75fc8367..38b8a462 100644
+index 75fc8367..a53a549d 100644
 --- a/rdprail-shell/shell.c
 +++ b/rdprail-shell/shell.c
-@@ -815,7 +815,7 @@ shell_configuration(struct desktop_shell *shell)
+@@ -45,6 +45,7 @@
+ #include "shared/helpers.h"
+ #include "shared/timespec-util.h"
+ #include "shared/image-loader.h"
++#include "shared/file-util.h"
+ #include <libweston-desktop/libweston-desktop.h>
+ #include <libweston/libweston.h>
+ #include <libweston/backend.h>
+@@ -802,8 +803,12 @@ shell_configuration(struct desktop_shell *shell)
+ 
+ 	/* default icon path is provided from WSL via enviromment variable */
+ 	s = getenv("WSL2_DEFAULT_APP_ICON");
+-	if (s && (strcmp(s, "disabled") != 0))
+-		shell->image_default_app_icon = load_image(s);
++	if (s) {
++		if (strcmp(s, "disabled") != 0)
++			shell->image_default_app_icon = load_image(s);
++	} else {
++		shell->image_default_app_icon = load_image(file_name_with_datadir("wayland.png"));
++	}
+ 	shell_rdp_debug(shell, "RDPRAIL-shell: WSL2_DEFAULT_APP_ICON:%s (loaded:%s)\n",
+ 		s, shell->image_default_app_icon ? "yes" : "no");
+ 
+@@ -815,7 +820,7 @@ shell_configuration(struct desktop_shell *shell)
  		s, shell->image_default_app_overlay_icon ? "yes" : "no");
  
  	shell->is_appid_with_distro_name = read_rdpshell_config_bool(
