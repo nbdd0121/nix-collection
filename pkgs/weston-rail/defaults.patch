@@ -1,0 +1,58 @@
+commit 336b0ce4abd3a979f89ca5a9409c807edb7dec80
+Author: Gary Guo <gary@garyguo.net>
+Date:   Thu Dec 25 20:47:57 2025 +0000
+
+    Opinionated defaults
+
+diff --git a/compositor/main.c b/compositor/main.c
+index cc03a899..0fff7d01 100644
+--- a/compositor/main.c
++++ b/compositor/main.c
+@@ -1116,12 +1116,7 @@ weston_choose_default_backend(void)
+ {
+ 	char *backend = NULL;
+ 
+-	if (getenv("WAYLAND_DISPLAY") || getenv("WAYLAND_SOCKET"))
+-		backend = strdup("wayland-backend.so");
+-	else if (getenv("DISPLAY"))
+-		backend = strdup("x11-backend.so");
+-	else
+-		backend = strdup(WESTON_NATIVE_BACKEND);
++	backend = strdup(WESTON_NATIVE_BACKEND);
+ 
+ 	return backend;
+ }
+@@ -2863,7 +2858,7 @@ load_rdp_backend(struct weston_compositor *c,
+ 		config.rail_config.enable_fractional_hi_dpi_roundup = false;
+ 	} else {
+ 		config.rail_config.enable_fractional_hi_dpi_roundup =
+-			read_rdp_config_bool("WESTON_RDP_FRACTIONAL_HI_DPI_SCALING_ROUNDUP", false);
++			read_rdp_config_bool("WESTON_RDP_FRACTIONAL_HI_DPI_SCALING_ROUNDUP", true);
+ 	}
+ 	if (config.rail_config.enable_hi_dpi_support) {
+ 		config.rail_config.debug_desktop_scaling_factor =
+@@ -2892,11 +2887,7 @@ load_rdp_backend(struct weston_compositor *c,
+ 		read_rdp_config_bool("WESTON_RDP_DISPLAY_POWER_BY_SCREENUPDATE", false);
+ 
+ 	config.rail_config.enable_distro_name_title = read_rdp_config_bool("WESTON_RDP_APPEND_DISTRONAME_TITLE", true);
+-#if defined(__arm__) || defined(__aarch64__)
+ 	config.rail_config.enable_copy_warning_title = read_rdp_config_bool("WESTON_RDP_COPY_WARNING_TITLE", false);
+-#else
+-	config.rail_config.enable_copy_warning_title = read_rdp_config_bool("WESTON_RDP_COPY_WARNING_TITLE", true);
+-#endif
+ 
+ 	wet->heads_changed_listener.notify = rdp_heads_changed;
+ 	weston_compositor_add_heads_changed_listener(c,
+diff --git a/rdprail-shell/shell.c b/rdprail-shell/shell.c
+index 75fc8367..38b8a462 100644
+--- a/rdprail-shell/shell.c
++++ b/rdprail-shell/shell.c
+@@ -815,7 +815,7 @@ shell_configuration(struct desktop_shell *shell)
+ 		s, shell->image_default_app_overlay_icon ? "yes" : "no");
+ 
+ 	shell->is_appid_with_distro_name = read_rdpshell_config_bool(
+-		"WESTON_RDPRAIL_SHELL_APPEND_DISTRONAME_STARTMENU", true);
++		"WESTON_RDPRAIL_SHELL_APPEND_DISTRONAME_STARTMENU", false);
+ 	shell_rdp_debug(shell, "RDPRAIL-shell: WESTON_RDPRAIL_SHELL_APPEND_DISTRONAME_STARTMEN:%d\n",
+ 		shell->is_appid_with_distro_name);
+ 

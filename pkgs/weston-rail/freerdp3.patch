@@ -1,0 +1,67 @@
+commit 5a37633b2cb217aa21c5fb6afae807176ef8997f
+Author: Gary Guo <gary@garyguo.net>
+Date:   Thu Dec 25 19:54:56 2025 +0000
+
+    Proper FreeRDP 3.x support
+
+diff --git a/compositor/meson.build b/compositor/meson.build
+index 21b6b57f..94010dc1 100644
+--- a/compositor/meson.build
++++ b/compositor/meson.build
+@@ -23,6 +23,7 @@ deps_weston = [
+ 	dep_threads,
+ 	dep_frdp,
+ 	dep_frdp_server,
++	dep_wpr,
+ ]
+ 
+ if get_option('xwayland')
+diff --git a/libweston/backend-rdp/meson.build b/libweston/backend-rdp/meson.build
+index 7d5d227d..849574d1 100644
+--- a/libweston/backend-rdp/meson.build
++++ b/libweston/backend-rdp/meson.build
+@@ -39,7 +39,7 @@ endif
+ 
+ if cc.has_member(
+ 	'rdpsnd_server_context', 'use_dynamic_virtual_channel',
+-	dependencies : dep_frdp,
++	dependencies : [dep_frdp, dep_wpr],
+ 	prefix : '#include <freerdp/server/rdpsnd.h>'
+ )
+ 	config_h.set('HAVE_RDPSND_DYNAMIC_VIRTUAL_CHANNEL', '1')
+diff --git a/libweston/backend-rdp/rdp.c b/libweston/backend-rdp/rdp.c
+index 153c7b6b..20fbbed4 100644
+--- a/libweston/backend-rdp/rdp.c
++++ b/libweston/backend-rdp/rdp.c
+@@ -1843,6 +1843,13 @@ rdp_peer_init(freerdp_peer *client, struct rdp_backend *b)
+ 	settings = client->context->settings;
+ 	/* configure security settings */
+ #if FREERDP_VERSION_MAJOR >= 3
++	if (b->rdp_key) {
++	     rdpPrivateKey* key = freerdp_key_new_from_file(b->rdp_key);
++	     if (!key)
++		     goto error_initialize;
++	     if (!freerdp_settings_set_pointer_len(settings, FreeRDP_RdpServerRsaKey, key, 1))
++		     goto error_initialize;
++	}
+ 	if (is_tls_enabled(b)) {
+ 		if (using_session_tls(b)) {
+ 			rdpPrivateKey* key = freerdp_key_new_from_pem(b->server_key_content);
+@@ -1850,7 +1857,16 @@ rdp_peer_init(freerdp_peer *client, struct rdp_backend *b)
+ 			rdpCertificate* cert = freerdp_certificate_new_from_pem(b->server_cert_content);
+ 			freerdp_settings_set_pointer_len(settings, FreeRDP_RdpServerCertificate, cert, 1);
+ 		} else {
+-			/*TODO*/
++			rdpCertificate* cert = freerdp_certificate_new_from_file(b->server_cert);
++			if (!cert)
++			     goto error_initialize;
++			if (!freerdp_settings_set_pointer_len(settings, FreeRDP_RdpServerCertificate, cert, 1))
++			     goto error_initialize;
++			rdpPrivateKey* key = freerdp_key_new_from_file(b->server_key);
++			if (!key)
++			     goto error_initialize;
++			if (!freerdp_settings_set_pointer_len(settings, FreeRDP_RdpServerRsaKey, key, 1))
++			     goto error_initialize;
+ 		}
+ 	} else {
+ 		freerdp_settings_set_bool(settings, FreeRDP_TlsSecurity, FALSE);
