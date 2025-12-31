@@ -1,0 +1,5 @@
+[allowlist]
+description = "Intended private key checkin"
+paths = [
+  "modules/pki-selective-trust/root.key"
+]
