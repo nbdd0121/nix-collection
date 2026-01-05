@@ -33,20 +33,25 @@ buildNpmPackage rec {
     copyDesktopItems
   ];
 
-  ESBUILD_BINARY_PATH = "${lib.getExe (esbuild.override {
-    buildGoModule = args:
-      buildGoModule (args
-        // rec {
-          version = "0.25.1";
-          src = fetchFromGitHub {
-            owner = "evanw";
-            repo = "esbuild";
-            rev = "v${version}";
-            hash = "sha256-vrhtdrvrcC3dQoJM6hWq6wrGJLSiVww/CNPlL1N5kQ8=";
-          };
-          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-        });
-  })}";
+  ESBUILD_BINARY_PATH = "${lib.getExe (
+    esbuild.override {
+      buildGoModule =
+        args:
+        buildGoModule (
+          args
+          // rec {
+            version = "0.25.1";
+            src = fetchFromGitHub {
+              owner = "evanw";
+              repo = "esbuild";
+              rev = "v${version}";
+              hash = "sha256-vrhtdrvrcC3dQoJM6hWq6wrGJLSiVww/CNPlL1N5kQ8=";
+            };
+            vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+          }
+        );
+    }
+  )}";
   ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   dontNpmBuild = true;
