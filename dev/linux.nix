@@ -39,19 +39,22 @@ let
     (pkgs.rust-bindgen-unwrapped.override {
       inherit clang;
     }).overrideAttrs
-      (prev: rec {
-        version = "0.69.1";
-        src = pkgs.fetchCrate {
-          pname = "bindgen-cli";
-          inherit version;
-          sha256 = "sha256-zqyIc07RLti2xb23bWzL7zFjreEZuUstnYSp+jUX8Lw=";
-        };
-        cargoDeps = prev.cargoDeps.overrideAttrs {
-          name = "${prev.pname}-${version}-vendor.tar.gz";
-          inherit src;
-          outputHash = "sha256-o1B8jq7Ze97pBLE9gvNsmCaD/tsW4f6DL0upzQkxbA4=";
-        };
-      });
+      (
+        final: prev: rec {
+          version = "0.69.5";
+          src = pkgs.fetchCrate {
+            pname = "bindgen-cli";
+            inherit version;
+            hash = "sha256-5S2ErALaqdn3KWU5DKaeBhe0UQISy2ajkX6aPhgd3xc=";
+          };
+          cargoHash = "sha256-FjBLw1eXj640ft9lD062+ihKHtmEpl4cVs+idfpZqas=";
+          cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
+            inherit src;
+            name = "${final.pname}-${final.version}";
+            hash = "${final.cargoHash}";
+          };
+        }
+      );
 in
 mkShell {
   inputsFrom = [ linux ];
