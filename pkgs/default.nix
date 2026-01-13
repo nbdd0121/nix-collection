@@ -5,5 +5,6 @@
   coccinelle4rust = pkgs.callPackage ./coccinelle4rust.nix { };
   patchwork = pkgs.python3Packages.callPackage ./patchwork.nix { };
   breaktimer = pkgs.callPackage ./breaktimer.nix { };
+  brow6el = pkgs.callPackage ./brow6el.nix { };
   weston-rail = pkgs.callPackage ./weston-rail { };
 }
