@@ -2,15 +2,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     flake-utils.url = "github:numtide/flake-utils";
-
-    treefmt-nix = {
-      url = "github:numtide/treefmt-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =
@@ -18,10 +9,19 @@
       self,
       nixpkgs,
       flake-utils,
-      treefmt-nix,
-      rust-overlay,
-    }:
+    }@publicInputs:
     let
+      evalFlake = import ./lib/evalFlake.nix;
+      inputs =
+        (evalFlake {
+          src = ./private;
+          inputOverride = {
+            inherit nixpkgs flake-utils;
+          };
+        }).inputs
+        // publicInputs;
+      inherit (inputs) treefmt-nix rust-overlay;
+
       noSystem = rec {
         nixosModules.default = import ./modules;
         nixosModule = nixosModules.default;
