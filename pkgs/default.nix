@@ -6,5 +6,6 @@
   patchwork = pkgs.python3Packages.callPackage ./patchwork.nix { };
   breaktimer = pkgs.callPackage ./breaktimer.nix { };
   brow6el = pkgs.callPackage ./brow6el.nix { };
+  kernel-kup = pkgs.perlPackages.callPackage ./kernel-kup.nix { };
   weston-rail = pkgs.callPackage ./weston-rail { };
 }
