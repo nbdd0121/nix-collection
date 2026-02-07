@@ -6,5 +6,6 @@
     ./lanzaboote-memtest86.nix
     ./zfs-tpm-unlock
     ./pki-selective-trust
+    ./kernel-fix
   ];
 }
