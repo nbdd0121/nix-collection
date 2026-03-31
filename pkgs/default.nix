@@ -9,4 +9,5 @@
   kernel-kup = pkgs.perlPackages.callPackage ./kernel-kup.nix { };
   weston-rail = pkgs.callPackage ./weston-rail { };
   audio-share = pkgs.callPackage ./audio-share.nix { };
+  uboot-rpi = pkgs.callPackage ./uboot-rpi.nix { };
 }
