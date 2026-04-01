@@ -41,13 +41,13 @@ let
     }).overrideAttrs
       (
         final: prev: rec {
-          version = "0.69.5";
+          version = "0.71.1";
           src = pkgs.fetchCrate {
             pname = "bindgen-cli";
             inherit version;
-            hash = "sha256-5S2ErALaqdn3KWU5DKaeBhe0UQISy2ajkX6aPhgd3xc=";
+            hash = "sha256-RL9P0dPYWLlEGgGWZuIvyULJfH+c/B+3sySVadJQS3w=";
           };
-          cargoHash = "sha256-FjBLw1eXj640ft9lD062+ihKHtmEpl4cVs+idfpZqas=";
+          cargoHash = "sha256-4EyDjHreFFFSGf7UoftCh6eI/8nfIP1ANlYWq0K8a3I=";
           cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
             inherit src;
             name = "${final.pname}-${final.version}";
