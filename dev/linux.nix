@@ -59,7 +59,7 @@ in
 mkShell {
   inputsFrom = [ linux ];
   packages = [
-    (rust-bin.stable."1.78.0".default.override {
+    (rust-bin.stable."1.85.1".default.override {
       extensions = [
         "rust-src"
         "clippy"
