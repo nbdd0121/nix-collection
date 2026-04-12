@@ -10,4 +10,5 @@
   weston-rail = pkgs.callPackage ./weston-rail { };
   audio-share = pkgs.callPackage ./audio-share.nix { };
   uboot-rpi = pkgs.callPackage ./uboot-rpi.nix { };
+  determinate-nix = pkgs.callPackage ./determinate-nix.nix { };
 }
