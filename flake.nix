@@ -29,10 +29,18 @@
       perSystem = flake-utils.lib.eachDefaultSystem (
         system:
         let
+          unstablePkgs = import inputs.nixpkgs-unstable {
+            inherit system;
+          };
           pkgs = import nixpkgs {
             config.allowUnfree = true;
             inherit system;
-            overlays = [ rust-overlay.overlays.default ];
+            overlays = [
+              rust-overlay.overlays.default
+              (final: prev: {
+                inherit (unstablePkgs) zap-chip;
+              })
+            ];
           };
         in
         {
