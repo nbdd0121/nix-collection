@@ -45,8 +45,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    rm libcef.so
+    ln -s ${cef-binary}/Release/libcef.so .
+
     mkdir -p $out/{libexec,bin}
-    cp -rf . $out/libexec/brow6el
+    cp -ra . $out/libexec/brow6el
     rm -rf $out/libexec/{CMake*,cmake*,Makefile,run_brow6el.sh}
 
     # Move brow6el into place.
@@ -67,5 +70,6 @@ stdenv.mkDerivation rec {
     homepage = "https://codeberg.org/janantos/brow6el";
     license = with lib.licenses; [ mit ];
     mainProgram = "brow6el";
+    platforms = ["x86_64-linux"];
   };
 }
