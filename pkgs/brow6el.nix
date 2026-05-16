@@ -11,12 +11,12 @@
 }:
 stdenv.mkDerivation rec {
   pname = "brow6el";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchgit {
     url = "https://codeberg.org/janantos/brow6el.git";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/Fw7CxEgs+iQpyoC7vY82kIKXZ0wUXq09Da0a/U4SEA=";
+    hash = "sha256-58NlPdTegk+ZXXbNRwN5JdtjmepJoPb0QeZxHz7WNkI=";
   };
 
   nativeBuildInputs = [
