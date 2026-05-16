@@ -1,0 +1,107 @@
+name: CI
+
+on:
+  push:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  plan:
+    name: Plan
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.plan.outputs.MATRIX }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            substituters = https://nix-cache.garyguo.net/default/ https://cache.nixos.org/
+            trusted-public-keys = nix-cache.garyguo.net-default-1:bUFrZymmNx+N4nZbWQSLzFu+OnvB1adsJHfIBbqecls= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
+
+      - name: Install Access Token
+        run: |
+          mkdir -p ~/.config/nix
+          echo "machine nix-cache.garyguo.net" >> ~/.config/nix/netrc
+          echo "password ${{ secrets.NIX_CACHE_TOKEN }}" >> ~/.config/nix/netrc
+          echo "netrc-file = $(realpath ~/.config/nix/netrc)" >> ~/.config/nix/nix.conf
+
+      - name: Generate Build Plan
+        id: plan
+        run: |
+          REBUILD=()
+          echo '| Package | System | Status |' >> $GITHUB_STEP_SUMMARY
+          echo '|---------|--------|--------|' >> $GITHUB_STEP_SUMMARY
+
+          SYSTEMS=(x86_64-linux aarch64-linux)
+
+          for SYSTEM in "${SYSTEMS[@]}"; do
+            # This is a json object with package names as keys and their main outputs as values
+            PACKAGES=$(nix eval --json ".#packages.$SYSTEM")
+
+            for ATTR in $(echo "$PACKAGES" | jq -r 'keys[]'); do
+              HASH=$(echo "$PACKAGES" | jq -r ".[\"$ATTR\"]" | cut -d '/' -f4 | cut -d '-' -f1)
+
+              # Check if the main output is cached by us or upstream.
+              CACHED=n
+              if curl -sSfL --netrc-file ~/.config/nix/netrc "https://nix-cache.garyguo.net/default/$HASH.narinfo"; then
+                CACHED=y
+              elif curl -sSfL "https://cache.nixos.org/$HASH.narinfo"; then
+                CACHED=y
+              fi
+
+              if [[ $CACHED == y ]]; then
+                echo "| $ATTR | $SYSTEM | ✅ Cached |" | tee -a $GITHUB_STEP_SUMMARY
+              else
+                REBUILD+=("$(jq --null-input '{attr: $attr, system: $system}' --arg attr "$ATTR" --arg system "$SYSTEM")")
+                echo "| $ATTR | $SYSTEM | ⏳ Need Rebuild |" | tee -a $GITHUB_STEP_SUMMARY
+              fi
+            done
+          done
+
+          echo 'MATRIX<<EOF' >> $GITHUB_OUTPUT
+          jq --null-input '$ARGS.positional' --jsonargs -- "${REBUILD[@]}" >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+  build:
+    needs: plan
+    name: Build
+    permissions:
+      id-token: write
+    # Matrix can't be empty, so skip the job entirely if nothing needs to be rebuilt.
+    if: fromJSON(needs.plan.outputs.matrix)[0] != null
+    strategy:
+      matrix:
+        include: ${{fromJSON(needs.plan.outputs.matrix)}}
+      fail-fast: false
+    runs-on: ${{ matrix.system == 'aarch64-linux' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            substituters = https://nix-cache.garyguo.net/default/ https://cache.nixos.org/
+            trusted-public-keys = nix-cache.garyguo.net-default-1:bUFrZymmNx+N4nZbWQSLzFu+OnvB1adsJHfIBbqecls= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
+
+      - name: Setup Cache
+        run: |
+          nix profile install nixpkgs#attic-client
+          attic login --set-default default https://nix-cache.garyguo.net/ ${{ secrets.NIX_CACHE_TOKEN }}
+          attic use default
+
+      - name: Build
+        run: |
+          # For derivations with multiple outputs, this produces a list that references all the outputs.
+          OUTPUTS=$(nix eval .#${{ matrix.attr }} --apply 'd: d.outputs' --json | jq -r 'map(".#${{ matrix.attr }}." + .) | join(" ")')
+          nix build $OUTPUTS --accept-flake-config -L
+
+      - name: Upload Cache
+        run: |
+          attic push default result*

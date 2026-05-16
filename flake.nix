@@ -45,7 +45,7 @@
         in
         {
           devShells = import ./dev { inherit pkgs; };
-          packages = import ./pkgs { inherit pkgs; };
+          packages = flake-utils.lib.filterPackages system (import ./pkgs { inherit pkgs; });
           formatter = (treefmt-nix.lib.evalModule pkgs ./treefmt.nix).config.build.wrapper;
         }
       );
