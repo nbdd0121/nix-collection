@@ -62,7 +62,7 @@ let
 in
 {
   mongodb-bin-7_0 = generic {
-    version = "7.0.26";
+    version = "7.0.34";
     url =
       {
         x86_64-linux = "https://repo.mongodb.org/yum/redhat/9/mongodb-org/7.0/x86_64/RPMS/mongodb-org-server-7.0.26-1.el9.x86_64.rpm";
