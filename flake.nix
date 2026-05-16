@@ -38,7 +38,7 @@
             overlays = [
               rust-overlay.overlays.default
               (final: prev: {
-                inherit (unstablePkgs) zap-chip;
+                inherit (unstablePkgs) zap-chip nixfmt-rs;
               })
             ];
           };
