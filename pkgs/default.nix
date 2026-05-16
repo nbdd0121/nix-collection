@@ -12,4 +12,5 @@
   determinate-nix = pkgs.callPackage ./determinate-nix.nix { };
   chip-tool = pkgs.callPackage ./chip-tool.nix { };
   cargo-unmaintained = pkgs.callPackage ./cargo-unmaintained.nix { };
+  hass-espsomfy-rts = pkgs.callPackage ./hass-espsomfy-rts.nix {};
 }
