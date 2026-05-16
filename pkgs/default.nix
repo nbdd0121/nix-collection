@@ -12,4 +12,5 @@
   uboot-rpi = pkgs.callPackage ./uboot-rpi.nix { };
   determinate-nix = pkgs.callPackage ./determinate-nix.nix { };
   chip-tool = pkgs.callPackage ./chip-tool.nix { };
+  cargo-unmaintained = pkgs.callPackage ./cargo-unmaintained.nix { };
 }
