@@ -15,5 +15,6 @@
   hass-espsomfy-rts = pkgs.callPackage ./hass-espsomfy-rts.nix { };
   hass-tabbed-card = pkgs.callPackage ./hass-tabbed-card.nix { };
   hass-illuminance = pkgs.callPackage ./hass-illuminance.nix { };
+  hass-layout-card = pkgs.callPackage ./hass-layout-card.nix { };
   ipt2socks = pkgs.callPackage ./ipt2socks.nix { };
 }
