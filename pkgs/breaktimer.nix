@@ -11,16 +11,16 @@
 }:
 buildNpmPackage rec {
   pname = "breaktimer";
-  version = "2.0.3";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "tom-james-watson";
     repo = "breaktimer-app";
     rev = "v${version}";
-    sha256 = "sha256-+kYDgUvxMkCyX7T3tc2qVvdo9Fs5ltu5h//IS2g/CNY=";
+    sha256 = "sha256-STDb6+brlVk/ZPUbw3cQOpe2r03WlFKEBgVLqJrsrHI=";
   };
 
-  npmDepsHash = "sha256-/aQNxd6XZirrSy/eiDxyARwvJ6ZYLFPpO8sBr8h1U/c=";
+  npmDepsHash = "sha256-UL8e0UKZKhHHC+JvRpmcdBvFHlCdn3YknceVJ+knMgg=";
 
   postPatch = ''
     for file in app/main/lib/{windows.ts,notifications.ts}; do
