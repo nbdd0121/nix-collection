@@ -16,5 +16,7 @@
   hass-tabbed-card = pkgs.callPackage ./hass-tabbed-card.nix { };
   hass-illuminance = pkgs.callPackage ./hass-illuminance.nix { };
   hass-layout-card = pkgs.callPackage ./hass-layout-card.nix { };
+  hass-scheduler-card = pkgs.callPackage ./hass-scheduler-card.nix { };
+  hass-scheduler-component = pkgs.callPackage ./hass-scheduler-component.nix { };
   ipt2socks = pkgs.callPackage ./ipt2socks.nix { };
 }
