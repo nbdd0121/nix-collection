@@ -11,8 +11,8 @@ let
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "nix-src";
-    tag = "v3.17.3";
-    hash = "sha256-/shs/3GA4R3rxhhqpPbEMnDZKbCvf3VpwnHB75nkTcI=";
+    tag = "v3.20.0";
+    hash = "sha256-oyHvP5HDRe59opmjTrq2ED9lh+R9FrHyaCGPPNfBqWM=";
   };
 
   nixDependencies =
