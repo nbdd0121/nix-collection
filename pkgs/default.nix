@@ -18,5 +18,6 @@
   hass-layout-card = pkgs.callPackage ./hass-layout-card.nix { };
   hass-scheduler-card = pkgs.callPackage ./hass-scheduler-card.nix { };
   hass-scheduler-component = pkgs.callPackage ./hass-scheduler-component.nix { };
+  hass-tianqi = pkgs.callPackage ./hass-tianqi.nix { };
   ipt2socks = pkgs.callPackage ./ipt2socks.nix { };
 }
