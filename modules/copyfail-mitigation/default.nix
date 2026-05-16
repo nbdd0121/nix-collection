@@ -52,7 +52,7 @@ let
         platforms = platforms.linux;
       };
     }
-  ) {};
+  ) { };
 in
 {
   options.security.copyfail-mitigation = {
