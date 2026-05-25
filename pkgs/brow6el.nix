@@ -72,6 +72,6 @@ stdenv.mkDerivation rec {
     homepage = "https://codeberg.org/janantos/brow6el";
     license = with lib.licenses; [ mit ];
     mainProgram = "brow6el";
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
   };
 }
