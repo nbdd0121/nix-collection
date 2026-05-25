@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  asio,
+  asio_1_32_0,
   protobuf,
   cxxopts,
   spdlog,
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    asio
+    asio_1_32_0
     protobuf
     cxxopts
     spdlog
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-    "-DASIO_INCLUDE_DIR=${asio}/include"
+    "-DASIO_INCLUDE_DIR=${asio_1_32_0}/include"
   ];
 
   installPhase = ''

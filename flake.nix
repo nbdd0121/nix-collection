@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -29,17 +29,11 @@
       perSystem = flake-utils.lib.eachDefaultSystem (
         system:
         let
-          unstablePkgs = import inputs.nixpkgs-unstable {
-            inherit system;
-          };
           pkgs = import nixpkgs {
             config.allowUnfree = true;
             inherit system;
             overlays = [
               rust-overlay.overlays.default
-              (final: prev: {
-                inherit (unstablePkgs) zap-chip nixfmt-rs;
-              })
             ];
           };
         in

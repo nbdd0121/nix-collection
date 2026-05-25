@@ -6,7 +6,7 @@
   cef-binary,
   pkg-config,
   libsixel,
-  xorg,
+  libx11,
   libGL,
 }:
 stdenv.mkDerivation rec {
@@ -26,12 +26,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libsixel
-    xorg.libX11
+    libx11
   ];
 
   # Make sure the RPATH points to the installed location.
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace-fail 'set(CMAKE_BUILD_RPATH ".")' 'set(CMAKE_BUILD_RPATH "'$out'/libexec/brow6el")'
+    substituteInPlace CMakeLists.txt \
+        --replace-fail 'set(CMAKE_BUILD_RPATH ".")' 'set(CMAKE_BUILD_RPATH "'$out'/libexec/brow6el")' \
+        --replace-fail 'set(CMAKE_CXX_STANDARD 17)' 'set(CMAKE_CXX_STANDARD 20)'
   '';
 
   # Ensure libcef_dll_wrapper is built

@@ -8,7 +8,6 @@
   brow6el = pkgs.callPackage ./brow6el.nix { };
   kernel-kup = pkgs.perlPackages.callPackage ./kernel-kup.nix { };
   audio-share = pkgs.callPackage ./audio-share.nix { };
-  uboot-rpi = pkgs.callPackage ./uboot-rpi.nix { };
   determinate-nix = pkgs.callPackage ./determinate-nix.nix { };
   chip-tool = pkgs.callPackage ./chip-tool.nix { };
   cargo-unmaintained = pkgs.callPackage ./cargo-unmaintained.nix { };
@@ -16,8 +15,6 @@
   hass-tabbed-card = pkgs.callPackage ./hass-tabbed-card.nix { };
   hass-illuminance = pkgs.callPackage ./hass-illuminance.nix { };
   hass-layout-card = pkgs.callPackage ./hass-layout-card.nix { };
-  hass-scheduler-card = pkgs.callPackage ./hass-scheduler-card.nix { };
-  hass-scheduler-component = pkgs.callPackage ./hass-scheduler-component.nix { };
   hass-tianqi = pkgs.callPackage ./hass-tianqi.nix { };
   ipt2socks = pkgs.callPackage ./ipt2socks.nix { };
 }
