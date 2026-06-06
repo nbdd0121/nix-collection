@@ -20,7 +20,7 @@ buildHomeAssistantComponent rec {
     substituteInPlace custom_components/espsomfy_rts/manifest.json --replace-fail "==1.8.0" "~=1.8"
   '';
 
-  dependencies = with home-assistant.python.pkgs; [
+  dependencies = with home-assistant.python3Packages; [
     websocket-client
     aiofiles
   ];
