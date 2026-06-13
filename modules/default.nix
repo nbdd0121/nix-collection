@@ -7,5 +7,6 @@
     ./zfs-tpm-unlock
     ./pki-selective-trust
     ./kernel-fix
+    ./btrfs-auto-snapshot.nix
   ];
 }
