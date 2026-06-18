@@ -68,8 +68,7 @@ mkShell {
     })
     rust-bindgen-unwrapped
     wrappedClang
-    llvmPackages.lld
-    llvmPackages.libllvm
+    llvmPackages.bintools
     b4
   ];
   buildInputs = [
