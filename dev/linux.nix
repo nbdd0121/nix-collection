@@ -31,6 +31,8 @@ let
         # If --target flag is specified, don't invoke with wrappers.
         exec ${lib.getExe clang.cc} "$@"
     else
+        # With -fuse-ld=lld, this would invoke unwrapped LLD.
+        export PATH=${llvmPackages.bintools}/bin:$PATH
         exec ${lib.getExe clang} "$@"
     fi
   '';
@@ -68,7 +70,8 @@ mkShell {
     })
     rust-bindgen-unwrapped
     wrappedClang
-    llvmPackages.bintools
+    llvmPackages.lld
+    llvmPackages.libllvm
     b4
   ];
   buildInputs = [
