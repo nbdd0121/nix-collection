@@ -10,7 +10,6 @@
   audio-share = pkgs.callPackage ./audio-share.nix { };
   determinate-nix = pkgs.callPackage ./determinate-nix.nix { };
   chip-tool = pkgs.callPackage ./chip-tool.nix { };
-  chip-ota-provider-app = pkgs.callPackage ./chip-ota-provider-app.nix { };
   cargo-unmaintained = pkgs.callPackage ./cargo-unmaintained.nix { };
   hass-espsomfy-rts = pkgs.callPackage ./hass-espsomfy-rts.nix { };
   hass-tabbed-card = pkgs.callPackage ./hass-tabbed-card.nix { };
