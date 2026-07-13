@@ -10,7 +10,7 @@
   ...
 }:
 let
-  llvmPackages = pkgs.llvmPackages_18;
+  llvmPackages = pkgs.llvmPackages_19;
   inherit (llvmPackages) clang;
 
   # The clang provided by Nixpkgs by default have wrappers so it can correctly
