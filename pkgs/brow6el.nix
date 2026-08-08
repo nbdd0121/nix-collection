@@ -8,15 +8,16 @@
   libsixel,
   libx11,
   libGL,
+  zlib,
 }:
 stdenv.mkDerivation rec {
   pname = "brow6el";
-  version = "0.3.4";
+  version = "0.3.5";
 
   src = fetchgit {
-    url = "https://codeberg.org/janantos/brow6el.git";
+    url = "https://tangled.org/janantos.tngl.sh/brow6el.git";
     rev = "refs/tags/v${version}";
-    hash = "sha256-58NlPdTegk+ZXXbNRwN5JdtjmepJoPb0QeZxHz7WNkI=";
+    hash = "sha256-XBmRqQUILhpCz0oFL6y03lrlCRgTn0nL8K57QBHPvDo=";
   };
 
   nativeBuildInputs = [
@@ -27,13 +28,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libsixel
     libx11
+    zlib
   ];
 
   # Make sure the RPATH points to the installed location.
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-        --replace-fail 'set(CMAKE_BUILD_RPATH ".")' 'set(CMAKE_BUILD_RPATH "'$out'/libexec/brow6el")' \
-        --replace-fail 'set(CMAKE_CXX_STANDARD 17)' 'set(CMAKE_CXX_STANDARD 20)'
+        --replace-fail 'set(CMAKE_BUILD_RPATH ".")' 'set(CMAKE_BUILD_RPATH "'$out'/libexec/brow6el")'
   '';
 
   # Ensure libcef_dll_wrapper is built
