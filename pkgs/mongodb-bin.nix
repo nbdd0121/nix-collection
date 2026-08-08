@@ -62,17 +62,17 @@ let
 in
 {
   mongodb-bin-7_0 = generic {
-    version = "7.0.34";
+    version = "7.0.39";
     url =
       {
-        x86_64-linux = "https://repo.mongodb.org/yum/redhat/9/mongodb-org/7.0/x86_64/RPMS/mongodb-org-server-7.0.26-1.el9.x86_64.rpm";
-        aarch64-linux = "https://repo.mongodb.org/yum/redhat/9/mongodb-org/7.0/aarch64/RPMS/mongodb-org-server-7.0.26-1.el9.aarch64.rpm";
+        x86_64-linux = "https://repo.mongodb.org/yum/redhat/9/mongodb-org/7.0/x86_64/RPMS/mongodb-org-server-7.0.39-1.el9.x86_64.rpm";
+        aarch64-linux = "https://repo.mongodb.org/yum/redhat/9/mongodb-org/7.0/aarch64/RPMS/mongodb-org-server-7.0.30-1.el9.aarch64.rpm";
       }
       .${system};
     sha256 =
       {
-        x86_64-linux = "sha256-n3V48G1lVGGSKmmgU1UclTRmbhNefxdKUSyX2uLc08k=";
-        aarch64-linux = "sha256-R9fmF144cbkI/NiBPeUL68mtctKQIBAhogvOXXGzu7o=";
+        x86_64-linux = "sha256-6yI29jvnJ+QYUmbEDEQKF0Fmub3/OPHGEHOJJvTeM/M=";
+        aarch64-linux = "sha256-hydONjg38WY8sQm/gwCAHnUJ48UTN00pFrfLauqAf+Q=";
       }
       .${system};
   };
