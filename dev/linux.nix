@@ -7,6 +7,7 @@
   rust-bin,
   b4,
   ncurses,
+  python3,
   ...
 }:
 let
@@ -73,6 +74,12 @@ mkShell {
     llvmPackages.lld
     llvmPackages.libllvm
     b4
+    (python3.withPackages (
+      ps: with ps; [
+        ply
+        gitpython
+      ]
+    ))
   ];
   buildInputs = [
     # For menuconfig
