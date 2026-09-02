@@ -22,9 +22,14 @@
         // publicInputs;
       inherit (inputs) treefmt-nix rust-overlay;
 
+      inherit (nixpkgs) lib;
+
       noSystem = rec {
         nixosModules.default = import ./modules;
         nixosModule = nixosModules.default;
+
+        overlays = import ./overlays lib;
+        overlay = overlays.default;
       };
       perSystem = flake-utils.lib.eachDefaultSystem (
         system:
@@ -34,6 +39,7 @@
             inherit system;
             overlays = [
               rust-overlay.overlays.default
+              noSystem.overlay
             ];
           };
         in
