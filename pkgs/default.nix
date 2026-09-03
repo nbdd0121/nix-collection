@@ -8,7 +8,6 @@
   brow6el = pkgs.callPackage ./brow6el.nix { };
   kernel-kup = pkgs.perlPackages.callPackage ./kernel-kup.nix { };
   audio-share = pkgs.callPackage ./audio-share.nix { };
-  determinate-nix = pkgs.callPackage ./determinate-nix.nix { };
   chip-tool = pkgs.callPackage ./chip-tool.nix { };
   cargo-unmaintained = pkgs.callPackage ./cargo-unmaintained.nix { };
   hass-espsomfy-rts = pkgs.callPackage ./hass-espsomfy-rts.nix { };
