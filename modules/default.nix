@@ -8,5 +8,6 @@
     ./pki-selective-trust
     ./kernel-fix
     ./btrfs-auto-snapshot.nix
+    ./zfs-disable-tmpfile
   ];
 }
