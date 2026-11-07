@@ -44,13 +44,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = config.boot.initrd.systemd.enable;
-        message = "`boot.zfs.tpm-unlock` needs systemd stage 1";
-      }
-    ];
-
     # This module is taking over decryption
     boot.zfs.requestEncryptionCredentials = false;
 
